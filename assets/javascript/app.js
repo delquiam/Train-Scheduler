@@ -1,0 +1,80 @@
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyA7siQh5M6Kp4_IbXwf7sjgWfDZvsJcFQ8",
+    authDomain: "trainschedule-126d3.firebaseapp.com",
+    databaseURL: "https://trainschedule-126d3.firebaseio.com",
+    projectId: "trainschedule-126d3",
+    storageBucket: "trainschedule-126d3.appspot.com",
+    messagingSenderId: "412405610026"
+};
+firebase.initializeApp(config);
+
+// VARIABLES
+// Get a reference to the database service
+var database = firebase.database();
+
+// Click Button changes what is stored in firebase
+$("#click-button").on("click", function (event) {
+    // Prevent the page from refreshing
+    event.preventDefault();
+
+    // Grab values from text-boxes
+    var trainName = $("#train").val().trim();
+    var destination = $("#destination").val().trim();
+    var firstTrainTime = $("#time").val().trim();
+    var frequency = $("#repeat").val().trim();
+
+    // Change what is saved in firebase
+    database.ref().push({
+        trainName: trainName,
+        destination: destination,
+        firstTrainTime: firstTrainTime,
+        frequency: frequency,
+    });
+
+    //Clear Input Fields
+    $("#train").val("");
+    $("#destination").val("");
+    $("#time").val("");
+    $("#repeat").val("");
+});
+
+
+    // Firebase watcher + initial loader
+    database.ref().on("child_added", function (snapshot) {
+
+    // Log everything that's coming out of snapshot
+
+    console.log(snapshot.val());
+    console.log(snapshot.val().trainName);
+    console.log(snapshot.val().destination);
+    console.log(snapshot.val().firstTrainTime);
+    console.log(snapshot.val().frequency);
+
+
+    //Data for New Child in Database
+    var addedTrainName = snapshot.val().trainName;//Newly Added Train Name
+    var addedDestination = snapshot.val().destination;//Newly Added Destination
+    var addedFrequency = snapshot.val().frequency; //Newly Added Employee's Monthly Rate
+    // var arrival = moment().diff(addedDate, "mins"); //Use Get Months Function to get how Many Months Since New Employee Start Date
+    // var mins = months * addedRate;  //Times Months Worked by Rate to get Total Billed
+
+    //New Row in the Output Table
+    var newRow = $("<tr>");
+
+    //Append Each Piece of Data to Row in Same Order as the Table Headers in HTML File
+    $(newRow).append("<td>" + addedTrainName + "</td>");
+    $(newRow).append("<td>" + addedDestination + "</td>");
+    $(newRow).append("<td>" + addedFrequency + "</td>");
+    $(newRow).append("<td>" +  + "</td>");//Next Arrival
+    $(newRow).append("<td>" +  + "</td>");//Minutes Away
+   
+
+    //Append New Row to Table Body
+    $("#trainTableRows").append(newRow);
+
+
+    // Handle the errors
+}, function (errorObject) {
+    console.log("The read failed: " + errorObject.code);
+});
