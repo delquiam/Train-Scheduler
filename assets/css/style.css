@@ -1,3 +1,15 @@
 .jumbotron{
     text-align:  center;
+    color: gold;
+    background: maroon;
+}
+
+#heading{
+    color: brown ;
+    background: blue;
+}
+
+#heading2{
+    color: black;
+    background:  yellow;
 }

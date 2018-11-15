@@ -6,8 +6,8 @@ var config = {
     projectId: "trainschedule-126d3",
     storageBucket: "trainschedule-126d3.appspot.com",
     messagingSenderId: "412405610026"
-  };
-  firebase.initializeApp(config);
+};
+firebase.initializeApp(config);
 
 // VARIABLES
 // Get a reference to the database service
@@ -40,8 +40,8 @@ $("#click-button").on("click", function (event) {
 });
 
 
-    // Firebase watcher + initial loader
-    database.ref().on("child_added", function (snapshot) {
+// Firebase watcher + initial loader
+database.ref().on("child_added", function (snapshot) {
 
     // Log everything that's coming out of snapshot
 
@@ -55,35 +55,33 @@ $("#click-button").on("click", function (event) {
     //Data for New Child in Database
     var addedTrainName = snapshot.val().trainName;//Newly Added Train Name
     var addedDestination = snapshot.val().destination;//Newly Added Destination
-    var addedFrequency = snapshot.val().frequency; //Newly Added Employee's Monthly Rate
-    var addedFirstTrainTime = snapshot.val().firstTrainTime;
-   
-    // var arrival = moment().diff(addedDate, "mins"); //Use Get Months Function to get how Many Months Since New Employee Start Date
-    // var mins = months * addedRate;  //Times Months Worked by Rate to get Total Billed
+    var addedFrequency = snapshot.val().frequency; //Newly Added Frequency
+    var addedFirstTrainTime = snapshot.val().firstTrainTime;//Newly Added Train Time
 
+   
     // First Time (pushed back 1 year to make sure it comes before current time)
     var firstTimeConverted = moment(addedFirstTrainTime, "HH:mm").subtract(1, "years");
-    console.log(firstTimeConverted);
+    // console.log(firstTimeConverted);
 
     // Current Time
     var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+    // console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
 
     // Difference between the times
     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-    console.log("DIFFERENCE IN TIME: " + diffTime);
+    // console.log("DIFFERENCE IN TIME: " + diffTime);
 
     // Time apart (remainder)
     var tRemainder = diffTime % addedFrequency;
-    console.log(tRemainder);
+    // console.log(tRemainder);
 
     // Minute Until Train
     var tMinutesTillTrain = addedFrequency - tRemainder;
-    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+    // console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
 
     // Next Train
     var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+    // console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
 
 
     // //New Row in the Output Table
@@ -95,13 +93,13 @@ $("#click-button").on("click", function (event) {
     $(newRow).append("<td>" + addedFrequency + "</td>");
     $(newRow).append("<td>" + moment(nextTrain).format("hh:mm") + "</td>");//Next Arrival
     $(newRow).append("<td>" + tRemainder + "</td>");//Minutes Away
-   
+
 
     //Append New Row to Table Body
     $("#trainTableRows").append(newRow);
 
 
-  //  Handle the errors
+    //  Handle the errors
 }, function (errorObject) {
-    console.log("The read failed: " + errorObject.code);
+    // console.log("The read failed: " + errorObject.code);
 });
