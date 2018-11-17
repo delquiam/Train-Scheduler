@@ -60,12 +60,12 @@ database.ref().on("child_added", function (snapshot) {
 
    
     // First Time (pushed back 1 year to make sure it comes before current time)
-    var firstTimeConverted = moment(addedFirstTrainTime, "HH:mm").subtract(1, "years");
+    var firstTimeConverted = moment(addedFirstTrainTime, "hh:mm A").subtract(1, "years");
     // console.log(firstTimeConverted);
 
     // Current Time
     var currentTime = moment();
-    // console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+    // console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm A"));
 
     // Difference between the times
     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
@@ -81,7 +81,7 @@ database.ref().on("child_added", function (snapshot) {
 
     // Next Train
     var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    // console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+    // console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm A"));
 
 
     // //New Row in the Output Table
@@ -91,10 +91,10 @@ database.ref().on("child_added", function (snapshot) {
     $(newRow).append("<td>" + addedTrainName + "</td>");
     $(newRow).append("<td>" + addedDestination + "</td>");
     $(newRow).append("<td>" + addedFrequency + "</td>");
-    $(newRow).append("<td>" + moment(nextTrain).format("hh:mm") + "</td>");//Next Arrival
+    $(newRow).append("<td>" + moment(nextTrain).format("hh:mm A") + "</td>");//Next Arrival
     $(newRow).append("<td>" + tRemainder + "</td>");//Minutes Away
 
-
+   
     //Append New Row to Table Body
     $("#trainTableRows").append(newRow);
 
